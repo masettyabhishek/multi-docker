@@ -1,7 +1,7 @@
 sudo: required
 services:
     - docker
-    
+
 before-install:
     - docker build -t masettyabhishek/react-test -f ./client/Dockerfile.dev ./client
 
@@ -18,3 +18,15 @@ after_success:
     - docker push masettyabhishek/multi-nginx
     - docker push masettyabhishek/multi-server
     - docker push masettyabhishek/multi-worker
+deploy:
+    provider: elasticbeanstalk
+    region: us-west-1
+    app: multi-docker
+    env: MultiDocker-env
+    bucket_name: elasticbeanstalk-us-west-1-306087325150
+    bucket_path: docker-multi
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_key_id: 
+        secure: $AWS_SECRET_KEY
